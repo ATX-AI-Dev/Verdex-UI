@@ -1,0 +1,8 @@
+/* ============================================================
+   @verdex/tokens — point d'entrée
+   Importe l'intégralité du socle CSS Verdex :
+   tokens (variables) + base (reset/fonts) + primitives utilitaires.
+   ============================================================ */
+@import './tokens.css';
+@import './base.css';
+@import './utilities.css';

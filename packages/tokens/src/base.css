@@ -1,0 +1,77 @@
+/* ============================================================
+   Verdex Design System — base
+   Reset léger, fonts, scrollbar, keyframes partagées.
+   Optionnel : à importer pour un reset global cohérent.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--vx-bg);
+  color: var(--vx-ink);
+  font-family: var(--vx-font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition:
+    background 0.4s ease,
+    color 0.4s ease;
+}
+
+.vx-mono {
+  font-family: var(--vx-font-mono);
+}
+
+/* — scrollbar — */
+.vx ::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.vx ::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  background: var(--vx-line);
+  border-radius: 8px;
+  border: 2px solid var(--vx-bg);
+}
+.vx ::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* — keyframes partagées — */
+@keyframes vx-rise {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes vx-shimmer {
+  from {
+    background-position: -180% 0;
+  }
+  to {
+    background-position: 180% 0;
+  }
+}
+
+@keyframes vx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="fr" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Verdex UI — Vanilla</title>
+    <!-- En production : <link rel="stylesheet" href="node_modules/@verdex/tokens/dist/index.css" /> -->
+    <link rel="stylesheet" href="../../packages/tokens/src/index.css" />
+    <style>
+      .wrap { max-width: 900px; margin: 0 auto; padding: 40px 24px 90px; }
+      .demo { padding: 18px; margin-bottom: 8px; }
+      .demo .row { flex-wrap: wrap; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap vx-stack">
+      <div class="vx-row" style="justify-content: space-between">
+        <div>
+          <span class="vx-eyebrow">Design System</span>
+          <h1 class="vx-title vx-title--1">Verdex UI — HTML/CSS</h1>
+        </div>
+        <button class="vx-btn" onclick="toggleTheme()">◐ Thème</button>
+      </div>
+
+      <p class="vx-text vx-text--muted">
+        Toutes les primitives ci-dessous sont du HTML pur stylé par
+        <code class="vx-text--mono">@verdex/tokens</code>.
+      </p>
+
+      <hr class="vx-divider" />
+
+      <!-- Buttons -->
+      <div class="vx-card demo">
+        <div class="vx-card__cap"><span class="vx-card__tag">Buttons</span></div>
+        <div class="vx-card__body vx-row">
+          <button class="vx-btn vx-btn--primary">Déployer</button>
+          <button class="vx-btn">Secondaire</button>
+          <button class="vx-btn vx-btn--ghost">Ghost</button>
+          <button class="vx-btn vx-btn--primary vx-btn--sm">Petit</button>
+          <button class="vx-btn" disabled>Désactivé</button>
+          <button class="vx-iconbtn" aria-label="Réglages">⚙</button>
+        </div>
+      </div>
+
+      <!-- Inputs -->
+      <div class="vx-card demo">
+        <div class="vx-card__cap"><span class="vx-card__tag">Inputs</span></div>
+        <div class="vx-card__body vx-grid-2">
+          <label class="vx-field">
+            <span class="vx-field__label">Email</span>
+            <span class="vx-field__wrap"><input class="vx-input" placeholder="you@verdex.io" /></span>
+          </label>
+          <label class="vx-field vx-field--error">
+            <span class="vx-field__label">Mot de passe</span>
+            <span class="vx-field__wrap"><input class="vx-input" type="password" value="x" /></span>
+            <span class="vx-field__hint vx-field__hint--error">Trop court.</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Chips / badges / alerts -->
+      <div class="vx-card demo">
+        <div class="vx-card__cap"><span class="vx-card__tag">Status</span></div>
+        <div class="vx-card__body vx-stack">
+          <div class="vx-row">
+            <span class="vx-chip vx-chip--ok"><span class="vx-chip__dot"></span> En ligne</span>
+            <span class="vx-chip vx-chip--warn"><span class="vx-chip__dot"></span> Dégradé</span>
+            <span class="vx-chip vx-chip--err"><span class="vx-chip__dot"></span> Hors-ligne</span>
+            <span class="vx-chip vx-chip--info"><span class="vx-chip__dot"></span> Info</span>
+            <span class="vx-badge">3</span>
+            <span class="vx-badge vx-badge--err">9+</span>
+          </div>
+          <div class="vx-alert vx-alert--success">
+            <span class="vx-alert__icon">✓</span>
+            <div class="vx-alert__body">
+              <p class="vx-alert__title">Déploiement réussi</p>
+              <p class="vx-alert__msg">La version 0.1.0 est en production.</p>
+            </div>
+          </div>
+          <div class="vx-alert vx-alert--warn">
+            <span class="vx-alert__icon">⚠</span>
+            <div class="vx-alert__body">
+              <p class="vx-alert__msg">Certificat TLS expire dans 7 jours.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs + skeleton -->
+      <div class="vx-card demo">
+        <div class="vx-card__cap"><span class="vx-card__tag">Tabs &amp; loading</span></div>
+        <div class="vx-card__body vx-stack">
+          <div class="vx-tabs">
+            <button class="vx-tabs__tab is-active">Aperçu</button>
+            <button class="vx-tabs__tab">Logs</button>
+            <button class="vx-tabs__tab">Réglages</button>
+          </div>
+          <div class="vx-skeleton-group">
+            <span class="vx-skeleton vx-skeleton--line" style="width: 100%"></span>
+            <span class="vx-skeleton vx-skeleton--line" style="width: 80%"></span>
+            <span class="vx-skeleton vx-skeleton--line is-sm" style="width: 60%"></span>
+          </div>
+        </div>
+      </div>
+
+      <p class="vx-text vx-text--sm vx-text--muted">
+        En savoir plus sur <a class="vx-link" href="https://github.com/Verdex-Workspace">Verdex Workspace</a>.
+      </p>
+    </div>
+
+    <script>
+      function toggleTheme() {
+        const el = document.documentElement
+        el.dataset.theme = el.dataset.theme === 'light' ? 'dark' : 'light'
+      }
+    </script>
+  </body>
+</html>

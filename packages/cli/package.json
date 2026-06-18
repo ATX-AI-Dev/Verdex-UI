@@ -1,0 +1,17 @@
+{
+  "name": "@verdex/cli",
+  "version": "0.1.0",
+  "description": "CLI Verdex — initialise le design system dans un projet (choix du framework).",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "verdex": "bin/index.mjs"
+  },
+  "files": [
+    "bin"
+  ],
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "picocolors": "^1.0.0"
+  }
+}

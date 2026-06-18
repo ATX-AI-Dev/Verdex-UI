@@ -1,0 +1,689 @@
+/* ============================================================
+   Verdex Design System — primitives UI (vanilla)
+   Classes réutilisables consommées en HTML/CSS pur, et reflétées
+   par les composants @verdex/vue. Toutes préfixées `vx-`.
+   ============================================================ */
+
+/* ---------- typographie ---------- */
+.vx-title {
+  margin: 0;
+  font-family: var(--vx-font-sans);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--vx-ink);
+  line-height: 1.2;
+}
+.vx-title--1 { font-size: 27px; }
+.vx-title--2 { font-size: 21px; }
+.vx-title--3 { font-size: 17px; }
+
+.vx-text {
+  margin: 0;
+  font-family: var(--vx-font-sans);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--vx-ink);
+}
+.vx-text--muted { color: var(--vx-muted); }
+.vx-text--mono { font-family: var(--vx-font-mono); }
+.vx-text--sm { font-size: 12px; }
+.vx-text--xs { font-size: 10.5px; }
+
+.vx-eyebrow {
+  font-family: var(--vx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--vx-muted);
+}
+
+/* ---------- link ---------- */
+.vx-link {
+  color: var(--vx-accent);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklab, var(--vx-accent) 40%, transparent);
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+  cursor: pointer;
+}
+.vx-link:hover {
+  color: color-mix(in oklab, var(--vx-accent) 80%, var(--vx-ink));
+  border-color: var(--vx-accent);
+}
+.vx-link--muted {
+  color: var(--vx-muted);
+  border-bottom-color: transparent;
+}
+.vx-link--muted:hover {
+  color: var(--vx-ink);
+}
+.vx-link__ext {
+  font-size: 0.85em;
+  opacity: 0.7;
+  margin-left: 2px;
+}
+
+/* ---------- buttons ---------- */
+.vx-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: var(--vx-font-mono);
+  font-size: 11px;
+  line-height: 1;
+  border: 1.5px solid var(--vx-line);
+  border-radius: var(--vx-radius-sm);
+  padding: 8px 13px;
+  background: var(--vx-paper2);
+  color: var(--vx-ink);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    filter 0.15s,
+    border-color 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
+}
+.vx-btn:hover:not(:disabled) {
+  border-color: var(--vx-accent-dim);
+}
+.vx-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--vx-ring);
+}
+.vx-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.vx-btn--primary {
+  background: var(--vx-accent);
+  color: var(--vx-accent-ink);
+  border-color: var(--vx-accent);
+  font-weight: 700;
+}
+.vx-btn--primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+  border-color: var(--vx-accent);
+}
+.vx-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--vx-muted);
+}
+.vx-btn--ghost:hover:not(:disabled) {
+  background: var(--vx-fill);
+  color: var(--vx-ink);
+  border-color: transparent;
+}
+.vx-btn--sm {
+  padding: 5px 10px;
+  font-size: 10px;
+}
+.vx-btn--block {
+  display: flex;
+  width: 100%;
+}
+.vx-btn__spinner {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  animation: vx-spin 0.7s linear infinite;
+}
+
+/* ---------- icon button ---------- */
+.vx-iconbtn {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--vx-radius-sm);
+  border: 1.5px solid var(--vx-line);
+  background: var(--vx-paper2);
+  color: var(--vx-ink);
+  cursor: pointer;
+  font-size: 15px;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    box-shadow 0.2s;
+}
+.vx-iconbtn:hover:not(:disabled) {
+  border-color: var(--vx-accent-dim);
+}
+.vx-iconbtn:focus-visible {
+  outline: none;
+  box-shadow: var(--vx-ring);
+}
+.vx-iconbtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.vx-iconbtn--ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--vx-muted);
+}
+.vx-iconbtn--ghost:hover:not(:disabled) {
+  background: var(--vx-fill);
+  color: var(--vx-ink);
+}
+.vx-iconbtn--sm {
+  width: 26px;
+  height: 26px;
+  font-size: 13px;
+}
+
+/* ---------- input ---------- */
+.vx-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vx-field__label {
+  font-family: var(--vx-font-mono);
+  font-size: 10px;
+  color: var(--vx-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.vx-field__wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.vx-field__icon {
+  position: absolute;
+  left: 11px;
+  display: grid;
+  place-items: center;
+  color: var(--vx-muted);
+  pointer-events: none;
+  font-size: 14px;
+}
+.vx-input {
+  width: 100%;
+  border: 1.5px solid var(--vx-line);
+  background: var(--vx-paper2);
+  color: var(--vx-ink);
+  font-family: var(--vx-font-mono);
+  font-size: 13px;
+  border-radius: var(--vx-radius-sm);
+  padding: 10px 12px;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.vx-field__wrap--icon .vx-input {
+  padding-left: 32px;
+}
+.vx-input::placeholder {
+  color: var(--vx-muted);
+  opacity: 0.7;
+}
+.vx-input:focus {
+  border-color: var(--vx-accent-dim);
+  box-shadow: var(--vx-ring);
+}
+.vx-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.vx-field--error .vx-input {
+  border-color: var(--vx-err);
+}
+.vx-field--error .vx-input:focus {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--vx-err) 22%, transparent);
+}
+.vx-field__hint {
+  font-size: 11px;
+  color: var(--vx-muted);
+}
+.vx-field__hint--error {
+  color: var(--vx-err);
+}
+
+/* ---------- card / frame ---------- */
+.vx-card {
+  background: var(--vx-paper);
+  border: 2px solid var(--vx-line);
+  border-radius: var(--vx-radius-lg);
+  box-shadow: var(--vx-shadow);
+  overflow: hidden;
+  position: relative;
+}
+.vx-card__cap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vx-ink);
+}
+.vx-card__tag {
+  font-family: var(--vx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--vx-accent-ink);
+  background: var(--vx-accent);
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.vx-card__tag--ghost {
+  background: transparent;
+  color: var(--vx-muted);
+  border: 1px solid var(--vx-line);
+}
+.vx-card__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px dashed var(--vx-line);
+  background: var(--vx-paper2);
+  font-family: var(--vx-font-mono);
+  font-size: 11px;
+  color: var(--vx-muted);
+  letter-spacing: 0.06em;
+}
+.vx-card__dots {
+  display: flex;
+  gap: 5px;
+}
+.vx-card__dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--vx-line);
+  display: block;
+}
+.vx-card__body {
+  padding: 14px;
+}
+
+/* ---------- box ---------- */
+.vx-box {
+  background: var(--vx-fill);
+  border: 1.5px solid var(--vx-line);
+  border-radius: var(--vx-radius);
+  position: relative;
+}
+.vx-box--dash { border-style: dashed; }
+.vx-box--plain { background: var(--vx-paper2); }
+.vx-box--clickable {
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.vx-box--clickable:hover {
+  border-color: var(--vx-accent-dim);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--vx-accent) 12%, transparent);
+}
+
+/* ---------- chip ---------- */
+.vx-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--vx-font-mono);
+  font-size: 10.5px;
+  border: 1px solid var(--vx-line);
+  border-radius: var(--vx-radius-pill);
+  padding: 3px 9px;
+  color: var(--vx-ink);
+  background: var(--vx-paper2);
+  white-space: nowrap;
+}
+.vx-chip__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--vx-muted);
+}
+.vx-chip--ok { border-color: color-mix(in oklab, var(--vx-accent) 50%, var(--vx-line)); }
+.vx-chip--ok .vx-chip__dot { background: var(--vx-accent); }
+.vx-chip--warn .vx-chip__dot { background: var(--vx-warn); }
+.vx-chip--err .vx-chip__dot { background: var(--vx-err); }
+.vx-chip--info .vx-chip__dot { background: var(--vx-info); }
+
+/* ---------- badge ---------- */
+.vx-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--vx-radius-pill);
+  background: var(--vx-accent);
+  color: var(--vx-accent-ink);
+  font-family: var(--vx-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+.vx-badge--neutral { background: var(--vx-fill-2); color: var(--vx-ink); }
+.vx-badge--warn { background: var(--vx-warn); color: var(--vx-accent-ink); }
+.vx-badge--err { background: var(--vx-err); color: #fff; }
+.vx-badge--info { background: var(--vx-info); color: var(--vx-accent-ink); }
+.vx-badge--dot {
+  min-width: 9px;
+  width: 9px;
+  height: 9px;
+  padding: 0;
+}
+.vx-badge-wrap {
+  position: relative;
+  display: inline-flex;
+}
+.vx-badge-wrap > .vx-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+}
+
+/* ---------- tabs ---------- */
+.vx-tabs {
+  display: inline-flex;
+  gap: 4px;
+  background: var(--vx-fill);
+  border: 1.5px solid var(--vx-line);
+  border-radius: 11px;
+  padding: 4px;
+}
+.vx-tabs__tab {
+  border: 0;
+  background: none;
+  color: var(--vx-muted);
+  font-family: var(--vx-font-mono);
+  font-size: 11px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  transition: all 0.18s;
+}
+.vx-tabs__tab:focus-visible {
+  outline: none;
+  box-shadow: var(--vx-ring);
+}
+.vx-tabs__tab.is-active {
+  background: var(--vx-paper);
+  color: var(--vx-ink);
+  box-shadow: 0 1px 0 var(--vx-line);
+}
+
+/* ---------- divider ---------- */
+.vx-divider {
+  height: 1px;
+  border: 0;
+  background: var(--vx-line-2);
+  margin: 22px 0;
+}
+.vx-divider--labelled {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: auto;
+  background: none;
+  color: var(--vx-muted);
+  font-family: var(--vx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.vx-divider--labelled::before,
+.vx-divider--labelled::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--vx-line-2);
+}
+
+/* ---------- alert ---------- */
+.vx-alert {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  border: 1.5px solid var(--vx-line);
+  border-left-width: 3px;
+  border-radius: var(--vx-radius);
+  padding: 12px 14px;
+  background: var(--vx-paper2);
+  color: var(--vx-ink);
+}
+.vx-alert__icon { font-size: 16px; line-height: 1.3; flex: none; }
+.vx-alert__body { flex: 1; min-width: 0; }
+.vx-alert__title { font-weight: 600; font-size: 13.5px; margin: 0 0 2px; }
+.vx-alert__msg { font-size: 12.5px; color: var(--vx-muted); margin: 0; line-height: 1.5; }
+.vx-alert--info { border-left-color: var(--vx-info); }
+.vx-alert--info .vx-alert__icon { color: var(--vx-info); }
+.vx-alert--success { border-left-color: var(--vx-accent); }
+.vx-alert--success .vx-alert__icon { color: var(--vx-accent); }
+.vx-alert--warn { border-left-color: var(--vx-warn); }
+.vx-alert--warn .vx-alert__icon { color: var(--vx-warn); }
+.vx-alert--err { border-left-color: var(--vx-err); }
+.vx-alert--err .vx-alert__icon { color: var(--vx-err); }
+.vx-alert__close {
+  border: 0;
+  background: none;
+  color: var(--vx-muted);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  padding: 0 2px;
+}
+.vx-alert__close:hover { color: var(--vx-ink); }
+
+/* ---------- skeleton ---------- */
+.vx-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--vx-line);
+  opacity: 0.85;
+  border-radius: 5px;
+}
+.vx-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--vx-ink) 14%, transparent),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: vx-shimmer 1.4s ease-in-out infinite;
+}
+.vx-skeleton--line { height: 9px; }
+.vx-skeleton--line.is-sm { height: 7px; }
+.vx-skeleton--box { height: 100%; border-radius: var(--vx-radius); }
+.vx-skeleton--circle { border-radius: 50%; }
+.vx-skeleton-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vx-skeleton::after { animation: none; }
+}
+
+/* ---------- textarea ---------- */
+.vx-textarea {
+  resize: vertical;
+  min-height: 64px;
+  line-height: 1.5;
+}
+
+/* ---------- checkbox (vanilla : input natif + box stylée) ---------- */
+.vx-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  font-family: var(--vx-font-sans);
+  font-size: 13px;
+  color: var(--vx-ink);
+  user-select: none;
+}
+.vx-check__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.vx-check__box {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border: 1.5px solid var(--vx-line);
+  border-radius: 5px 6px 5px 7px;
+  background: var(--vx-paper2);
+  transition: background 0.15s, border-color 0.15s;
+}
+.vx-check__box::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--vx-accent-ink);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.15s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.vx-check__input:checked + .vx-check__box {
+  background: var(--vx-accent);
+  border-color: var(--vx-accent);
+}
+.vx-check__input:checked + .vx-check__box::after { transform: rotate(45deg) scale(1); }
+
+/* ---------- radio ---------- */
+.vx-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  font-family: var(--vx-font-sans);
+  font-size: 13px;
+  color: var(--vx-ink);
+  user-select: none;
+}
+.vx-radio__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.vx-radio__dot {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border: 1.5px solid var(--vx-line);
+  border-radius: 50%;
+  background: var(--vx-paper2);
+  transition: border-color 0.15s;
+}
+.vx-radio__dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--vx-accent);
+  transform: scale(0);
+  transition: transform 0.15s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.vx-radio__input:checked + .vx-radio__dot { border-color: var(--vx-accent); }
+.vx-radio__input:checked + .vx-radio__dot::after { transform: scale(1); }
+
+/* ---------- switch ---------- */
+.vx-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--vx-font-sans);
+  font-size: 13px;
+  color: var(--vx-ink);
+  user-select: none;
+}
+.vx-switch__track {
+  position: relative;
+  width: 38px;
+  height: 22px;
+  flex: none;
+  border: 1.5px solid var(--vx-line);
+  border-radius: 999px;
+  background: var(--vx-paper2);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+.vx-switch__track.is-on {
+  background: var(--vx-accent);
+  border-color: var(--vx-accent);
+}
+.vx-switch__thumb {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--vx-ink);
+  transition: transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.vx-switch__track.is-on .vx-switch__thumb {
+  transform: translateX(16px);
+  background: var(--vx-accent-ink);
+}
+
+/* ---------- select (coque statique ; comportement = @verdex/vue) ---------- */
+.vx-select__trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  border: 1.5px solid var(--vx-line);
+  background: var(--vx-paper2);
+  color: var(--vx-ink);
+  font-family: var(--vx-font-mono);
+  font-size: 13px;
+  border-radius: var(--vx-radius-sm);
+  padding: 10px 12px;
+  cursor: pointer;
+  text-align: left;
+}
+.vx-select__trigger:hover { border-color: var(--vx-accent-dim); }
+.vx-select__value { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vx-select__chev { color: var(--vx-muted); font-size: 11px; }
+
+/* ---------- layout helpers ---------- */
+.vx-stack { display: flex; flex-direction: column; gap: 14px; }
+.vx-row { display: flex; align-items: center; gap: 10px; }
+.vx-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.vx-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+@media (max-width: 1080px) {
+  .vx-grid-3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 760px) {
+  .vx-grid-2,
+  .vx-grid-3 { grid-template-columns: 1fr; }
+}

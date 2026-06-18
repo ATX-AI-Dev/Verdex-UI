@@ -1,0 +1,22 @@
+{
+  "name": "@verdex/tokens",
+  "version": "0.1.0",
+  "description": "Verdex design tokens & primitives CSS — socle agnostique (HTML/CSS).",
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": "./dist/index.css",
+    "./tokens.css": "./dist/tokens.css",
+    "./base.css": "./dist/base.css",
+    "./utilities.css": "./dist/utilities.css",
+    "./index.css": "./dist/index.css"
+  },
+  "style": "./dist/index.css",
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  }
+}
