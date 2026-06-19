@@ -41,6 +41,7 @@ import VGrid from './components/VGrid.vue'
 import VTimeline from './components/VTimeline.vue'
 import VSteps from './components/VSteps.vue'
 import VProgress from './components/VProgress.vue'
+import VLineChart from './components/VLineChart.vue'
 import VCarousel from './components/VCarousel.vue'
 import VAvatar from './components/VAvatar.vue'
 import VBanner from './components/VBanner.vue'
@@ -96,6 +97,7 @@ export {
   VTimeline,
   VSteps,
   VProgress,
+  VLineChart,
   VCarousel,
   VAvatar,
   VBanner,
@@ -178,6 +180,7 @@ const components = {
   VTimeline,
   VSteps,
   VProgress,
+  VLineChart,
   VCarousel,
   VAvatar,
   VBanner,
