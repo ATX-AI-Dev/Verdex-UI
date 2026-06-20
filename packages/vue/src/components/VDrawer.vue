@@ -59,11 +59,11 @@ const motion = computed(() => `drawer-${props.side}` as 'drawer-left' | 'drawer-
 }
 .vx-drawer--right {
   border-left: 2px solid var(--vx-line);
-  box-shadow: -30px 0 60px -30px rgba(0, 0, 0, 0.6);
+  box-shadow: -30px 0 60px -30px var(--vx-overlay);
 }
 .vx-drawer--left {
   border-right: 2px solid var(--vx-line);
-  box-shadow: 30px 0 60px -30px rgba(0, 0, 0, 0.6);
+  box-shadow: 30px 0 60px -30px var(--vx-overlay);
 }
 .vx-drawer__head {
   display: flex;

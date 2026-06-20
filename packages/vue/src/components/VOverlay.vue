@@ -111,7 +111,7 @@ function onKeydown(e: KeyboardEvent) {
 .vx-overlay__scrim {
   position: absolute;
   inset: 0;
-  background: rgba(2, 8, 6, 0.55);
+  background: var(--vx-overlay);
   backdrop-filter: blur(2px);
   animation: vx-scrim-in 0.3s ease;
 }

@@ -16,8 +16,10 @@ const props = withDefaults(
     dot?: boolean
     /** Tonalité. */
     kind?: 'accent' | 'neutral' | 'warn' | 'err' | 'info'
+    /** Indique si le badge doit annoncer les changements (région active). */
+    live?: boolean
   }>(),
-  { kind: 'accent', max: 99 },
+  { kind: 'accent', max: 99, live: false },
 )
 
 const display = computed(() => {
@@ -34,7 +36,7 @@ const display = computed(() => {
     <span
       class="vx-badge"
       :class="[`vx-badge--${kind}`, { 'vx-badge--dot': dot }]"
-      role="status"
+      :role="live ? 'status' : 'img'"
       :aria-label="dot ? 'notification' : display"
     >{{ display }}</span>
   </span>
@@ -43,7 +45,7 @@ const display = computed(() => {
     v-else
     class="vx-badge"
     :class="[`vx-badge--${kind}`, { 'vx-badge--dot': dot }]"
-    role="status"
+    :role="live ? 'status' : 'img'"
     :aria-label="dot ? 'notification' : display"
   >{{ display }}</span>
 </template>
@@ -66,7 +68,7 @@ const display = computed(() => {
 }
 .vx-badge--neutral { background: var(--vx-fill-2); color: var(--vx-ink); }
 .vx-badge--warn { background: var(--vx-warn); color: var(--vx-accent-ink); }
-.vx-badge--err { background: var(--vx-err); color: #fff; }
+.vx-badge--err { background: var(--vx-err); color: var(--vx-bg); }
 .vx-badge--info { background: var(--vx-info); color: var(--vx-accent-ink); }
 .vx-badge--dot {
   min-width: 9px;

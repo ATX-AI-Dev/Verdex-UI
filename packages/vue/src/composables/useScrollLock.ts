@@ -3,6 +3,11 @@ import { watch, onBeforeUnmount, type Ref } from 'vue'
 let lockCount = 0
 let previousOverflow = ''
 
+export function __resetForTesting() {
+  lockCount = 0
+  previousOverflow = ''
+}
+
 function lock() {
   if (typeof document === 'undefined') return
   if (lockCount === 0) {
@@ -22,6 +27,7 @@ function unlock() {
 export function useScrollLock(active: Ref<boolean>) {
   let locked = false
   function apply(on: boolean) {
+    if (typeof document === 'undefined') return
     if (on && !locked) {
       locked = true
       lock()

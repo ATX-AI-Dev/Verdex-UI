@@ -1,4 +1,4 @@
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import type { ValidationRule } from '../validators'
 
 interface FieldConfig<T = unknown> {
@@ -22,7 +22,7 @@ type Errors<S extends Schema> = Partial<Record<keyof S, string>>
  * })
  * const onSubmit = handleSubmit((v) => console.log(v))
  * ```
- */
+ *   */
 export function useForm<S extends Schema>(schema: S) {
   const initial = {} as Values<S>
   const rulesMap = {} as Record<keyof S, ValidationRule[]>
@@ -33,6 +33,7 @@ export function useForm<S extends Schema>(schema: S) {
 
   const values = reactive({ ...initial }) as Values<S>
   const errors = reactive({}) as Errors<S>
+  const isDirty = ref(false)
 
   function validateField(name: keyof S): boolean {
     for (const rule of rulesMap[name]) {
@@ -47,6 +48,7 @@ export function useForm<S extends Schema>(schema: S) {
   }
 
   function validate(): boolean {
+    isDirty.value = true
     let ok = true
     for (const key in rulesMap) {
       if (!validateField(key)) ok = false
@@ -57,9 +59,10 @@ export function useForm<S extends Schema>(schema: S) {
   function reset(): void {
     Object.assign(values, initial)
     for (const key in errors) delete errors[key]
+    isDirty.value = false
   }
 
-  const isValid = computed(() => Object.keys(errors).length === 0)
+  const isValid = computed(() => isDirty.value && Object.keys(errors).length === 0)
 
   function handleSubmit(onValid: (values: Values<S>) => void | Promise<void>) {
     return (e?: Event) => {
@@ -68,5 +71,5 @@ export function useForm<S extends Schema>(schema: S) {
     }
   }
 
-  return { values, errors, isValid, validate, validateField, reset, handleSubmit }
+  return { values, errors, isValid, isDirty, validate, validateField, reset, handleSubmit }
 }

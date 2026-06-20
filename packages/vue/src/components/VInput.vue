@@ -11,7 +11,7 @@ withDefaults(
     /** Message d'erreur (active l'état error). */
     error?: string
     /** Type HTML natif. */
-    type?: string
+    type?: 'text' | 'password' | 'email' | 'number' | 'url' | 'tel' | 'search' | 'date' | 'time' | 'datetime-local' | 'month' | 'week' | 'color' | 'file' | 'hidden'
     /** Placeholder. */
     placeholder?: string
     /** Désactive le champ. */
@@ -20,6 +20,8 @@ withDefaults(
     required?: boolean
     /** autocomplete natif. */
     autocomplete?: string
+    /** Label accessible pour les lecteurs d'écran (si aucun label visuel n'est fourni). */
+    ariaLabel?: string
   }>(),
   { type: 'text' },
 )
@@ -43,6 +45,7 @@ const hintId = useId()
         :disabled="disabled"
         :required="required"
         :autocomplete="autocomplete"
+        :aria-label="ariaLabel"
         :aria-invalid="!!error || undefined"
         :aria-describedby="hint || error ? hintId : undefined"
       />

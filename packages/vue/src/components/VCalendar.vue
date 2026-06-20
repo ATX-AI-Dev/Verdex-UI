@@ -66,6 +66,15 @@ const cells = computed(() => {
   return out
 })
 
+const rows = computed(() => {
+  const result: (number | null)[][] = []
+  const c = cells.value
+  for (let i = 0; i < c.length; i += 7) {
+    result.push(c.slice(i, i + 7))
+  }
+  return result
+})
+
 function isDisabled(d: number) {
   const iso = toISO(viewYear.value, viewMonth.value, d)
   if (props.min && iso < props.min) return true
@@ -88,30 +97,33 @@ function shift(delta: number) {
 </script>
 
 <template>
-  <div class="vx-cal" role="group" :aria-label="monthLabel">
+  <div class="vx-cal" role="grid" :aria-label="monthLabel">
     <div class="vx-cal__head">
       <button type="button" class="vx-cal__nav" aria-label="Mois précédent" @click="shift(-1)">‹</button>
       <span class="vx-cal__title">{{ monthLabel }}</span>
       <button type="button" class="vx-cal__nav" aria-label="Mois suivant" @click="shift(1)">›</button>
     </div>
-    <div class="vx-cal__grid vx-cal__weekdays" aria-hidden="true">
-      <span v-for="w in weekdays" :key="w" class="vx-cal__wd">{{ w }}</span>
+    <div class="vx-cal__weekdays" aria-hidden="true" role="row">
+      <span v-for="w in weekdays" :key="w" class="vx-cal__wd" role="columnheader">{{ w }}</span>
     </div>
     <div class="vx-cal__grid">
-      <template v-for="(d, i) in cells" :key="i">
-        <span v-if="d === null" class="vx-cal__blank" />
-        <button
-          v-else
-          type="button"
-          class="vx-cal__day"
-          :class="{ 'is-selected': isSelected(d), 'is-today': isToday(d) }"
-          :disabled="isDisabled(d)"
-          :aria-pressed="isSelected(d)"
-          @click="pick(d)"
-        >
-          {{ d }}
-        </button>
-      </template>
+      <div v-for="(row, rowIndex) in rows" :key="rowIndex" role="row" class="vx-cal__row">
+        <template v-for="(d, cellIndex) in row" :key="cellIndex">
+          <span v-if="d === null" class="vx-cal__blank" role="gridcell" />
+          <button
+            v-else
+            type="button"
+            class="vx-cal__day"
+            role="gridcell"
+            :class="{ 'is-selected': isSelected(d), 'is-today': isToday(d) }"
+            :disabled="isDisabled(d)"
+            :aria-selected="isSelected(d)"
+            @click="pick(d)"
+          >
+            {{ d }}
+          </button>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -153,6 +165,16 @@ function shift(delta: number) {
   border-color: var(--vx-accent-dim);
 }
 .vx-cal__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vx-cal__row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.vx-cal__weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 2px;

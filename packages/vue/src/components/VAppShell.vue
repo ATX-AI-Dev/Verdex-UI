@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 /**
  * Coquille applicative : barre latérale + entête + zone de contenu.
@@ -7,7 +7,24 @@ import { ref } from 'vue'
  */
 const sidebarOpen = ref(false)
 
-defineExpose({ sidebarOpen })
+function openSidebar() {
+  sidebarOpen.value = true
+}
+
+function closeSidebar() {
+  sidebarOpen.value = false
+}
+
+function toggleSidebar() {
+  sidebarOpen.value = !sidebarOpen.value
+}
+
+defineExpose({
+  sidebarOpen: computed(() => sidebarOpen.value),
+  openSidebar,
+  closeSidebar,
+  toggleSidebar,
+})
 </script>
 
 <template>
@@ -105,7 +122,7 @@ defineExpose({ sidebarOpen })
     position: fixed;
     inset: 0;
     z-index: 49;
-    background: rgba(2, 8, 6, 0.5);
+    background: var(--vx-overlay);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
@@ -114,6 +131,13 @@ defineExpose({ sidebarOpen })
     display: block;
     opacity: 1;
     pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vx-shell__sidebar,
+  .vx-shell__scrim {
+    transition: none !important;
   }
 }
 </style>

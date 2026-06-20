@@ -17,12 +17,14 @@ const props = withDefaults(
     gradientId?: string
     /** Fill color for the area under the line */
     fillColor?: string
+    /** Accessible summary of the chart data */
+    summary?: string
   }>(),
   {
     maxPoints: 30,
     strokeColor: 'var(--vx-accent)',
     gradientId: 'vx-line-chart-gradient',
-    fillColor: 'rgba(46, 229, 157, 0.15)',
+    fillColor: 'color-mix(in srgb, var(--vx-accent) 15%, transparent)',
   },
 )
 
@@ -92,13 +94,16 @@ const fillPath = computed(() => {
 
 <template>
   <div class="relative w-full h-full">
+    <p v-if="summary" class="sr-only">{{ summary }}</p>
     <svg
       :viewBox="`0 0 ${width} ${height}`"
       class="w-full h-full overflow-visible"
       preserveAspectRatio="none"
-      aria-hidden="true"
+      :aria-hidden="summary ? undefined : 'true'"
+      :role="summary ? 'img' : undefined"
     >
       <defs>
+        <title v-if="summary">{{ summary }}</title>
         <!-- Gradients for fill -->
         <linearGradient :id="gradientId" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" :stop-color="strokeColor" stop-opacity="0.35" />
@@ -126,3 +131,17 @@ const fillPath = computed(() => {
     </svg>
   </div>
 </template>
+
+<style scoped>
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+</style>

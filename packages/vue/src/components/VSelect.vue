@@ -118,21 +118,24 @@ watch(activeIndex, (i) => {
 <template>
   <div ref="root" class="vx-field vx-select" :class="{ 'vx-field--error': !!error }">
     <label v-if="label" :id="`${baseId}-label`" class="vx-field__label">{{ label }}</label>
-    <button
-      ref="trigger"
-      type="button"
-      class="vx-select__trigger"
-      :class="{ 'is-open': open, 'is-placeholder': !selected }"
-      :disabled="disabled"
-      role="combobox"
-      aria-haspopup="listbox"
-      :aria-expanded="open"
-      :aria-controls="`${baseId}-list`"
-      :aria-labelledby="label ? `${baseId}-label` : undefined"
-      @click="open ? (open = false) : openMenu()"
-      @keydown="onKeydown"
-    >
-      <span class="vx-select__value">{{ selected?.label ?? placeholder }}</span>
+    <div class="vx-select__trigger-wrap">
+      <button
+        ref="trigger"
+        type="button"
+        class="vx-select__trigger"
+        :class="{ 'is-open': open, 'is-placeholder': !selected, 'has-clear': clearable && selected && !disabled }"
+        :disabled="disabled"
+        role="combobox"
+        aria-haspopup="listbox"
+        :aria-expanded="open"
+        :aria-controls="`${baseId}-list`"
+        :aria-labelledby="label ? `${baseId}-label` : undefined"
+        @click="open ? (open = false) : openMenu()"
+        @keydown="onKeydown"
+      >
+        <span class="vx-select__value">{{ selected?.label ?? placeholder }}</span>
+        <span class="vx-select__chev" aria-hidden="true">▾</span>
+      </button>
       <button
         v-if="clearable && selected && !disabled"
         type="button"
@@ -140,8 +143,7 @@ watch(activeIndex, (i) => {
         aria-label="Effacer"
         @click.stop="clear"
       >✕</button>
-      <span class="vx-select__chev" aria-hidden="true">▾</span>
-    </button>
+    </div>
 
     <ul
       v-show="open"
@@ -193,6 +195,10 @@ watch(activeIndex, (i) => {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+.vx-select__trigger-wrap {
+  position: relative;
+  width: 100%;
+}
 .vx-select__trigger {
   display: flex;
   align-items: center;
@@ -205,11 +211,15 @@ watch(activeIndex, (i) => {
   font-size: 13px;
   border-radius: var(--vx-radius-sm, 7px 9px 6px 10px);
   padding: 10px 12px;
+  padding-right: 32px;
   cursor: pointer;
   text-align: left;
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
+}
+.vx-select__trigger.has-clear {
+  padding-right: 48px;
 }
 .vx-select__trigger:hover:not(:disabled) {
   border-color: var(--vx-accent-dim);
@@ -234,20 +244,34 @@ watch(activeIndex, (i) => {
   white-space: nowrap;
 }
 .vx-select__chev {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--vx-muted);
   font-size: 11px;
   transition: transform 0.2s;
+  pointer-events: none;
 }
 .vx-select__trigger.is-open .vx-select__chev {
-  transform: rotate(180deg);
+  transform: translateY(-50%) rotate(180deg);
 }
 .vx-select__clear {
+  position: absolute;
+  top: 50%;
+  right: 28px;
+  transform: translateY(-50%);
+  z-index: 2;
   border: 0;
   background: none;
   color: var(--vx-muted);
   cursor: pointer;
   font-size: 12px;
-  padding: 0 2px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 .vx-select__clear:hover {
   color: var(--vx-ink);

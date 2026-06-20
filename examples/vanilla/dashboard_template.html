@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="fr" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Verdex — Template</title>
+    <!-- Fonts & Primitives CSS -->
+    <link rel="stylesheet" href="../../packages/tokens/src/index.css" />
+    <!-- CDN GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <style>
+      body {
+        min-height: 100vh;
+        display: flex;
+        background: var(--vx-bg);
+        color: var(--vx-ink);
+        overflow: hidden;
+      }
+      .sidebar {
+        width: 260px;
+        background: var(--vx-paper);
+        border-right: 2px solid var(--vx-line);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 24px 16px;
+        height: 100vh;
+        box-sizing: border-box;
+      }
+      .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow-y: auto;
+      }
+      .header {
+        height: 70px;
+        background: var(--vx-paper);
+        border-bottom: 2px solid var(--vx-line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 32px;
+        flex-shrink: 0;
+      }
+      .workspace {
+        padding: 32px;
+        max-width: 1400px;
+        width: 100%;
+        margin: 0 auto;
+        box-sizing: border-box;
+      }
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        color: var(--vx-muted);
+        text-decoration: none;
+        font-family: var(--vx-font-sans);
+        font-weight: 500;
+        border-radius: var(--vx-radius-sm);
+        transition: all 0.2s ease;
+        margin-bottom: 6px;
+        border: 2px solid transparent;
+      }
+      .nav-link:hover, .nav-link.is-active {
+        color: var(--vx-ink);
+        background: var(--vx-fill);
+        border-color: var(--vx-line-2);
+      }
+      .nav-link.is-active {
+        border-color: var(--vx-line);
+        background: var(--vx-paper2);
+      }
+      .metric-card {
+        border: 2px solid var(--vx-line);
+        background: var(--vx-paper);
+        border-radius: var(--vx-radius);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        position: relative;
+        overflow: hidden;
+      }
+      .metric-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--vx-line-2);
+      }
+      .metric-card--accent::before {
+        background: var(--vx-accent);
+      }
+      .metric-card--err::before {
+        background: var(--vx-err);
+      }
+      .metric-card--warn::before {
+        background: var(--vx-warn);
+      }
+      .vx-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+      }
+      .vx-table th {
+        font-family: var(--vx-font-sans);
+        color: var(--vx-muted);
+        font-weight: 600;
+        padding: 12px 16px;
+        border-bottom: 2px solid var(--vx-line);
+        font-size: 14px;
+      }
+      .vx-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--vx-line-2);
+        font-family: var(--vx-font-sans);
+        font-size: 14px;
+      }
+      .vx-table tbody tr:hover {
+        background: var(--vx-fill);
+      }
+      /* Custom Overlay & Modal stylings */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 24, 28, 0.7);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 1000;
+        transition: opacity 0.3s ease;
+      }
+      .modal-overlay.is-active {
+        opacity: 1;
+        pointer-events: all;
+      }
+      .modal-card {
+        width: 500px;
+        max-width: 90vw;
+        background: var(--vx-paper);
+        border: 2px solid var(--vx-line);
+        border-radius: var(--vx-radius-lg);
+        box-shadow: var(--vx-shadow);
+        transform: scale(0.9) translateY(20px);
+      }
+      /* mini-charts */
+      .sparkline-bar {
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        height: 60px;
+        margin-top: 12px;
+      }
+      .sparkline-bar__col {
+        flex: 1;
+        background: var(--vx-fill-2);
+        border-radius: 2px 2px 0 0;
+        transition: background 0.3s ease;
+      }
+      .sparkline-bar__col:hover {
+        background: var(--vx-accent);
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- Modal Dialog (Deployment detail) -->
+    <div id="modal" class="modal-overlay" onclick="closeModal(event)">
+      <div class="modal-card vx-card" onclick="event.stopPropagation()">
+        <div class="vx-card__cap">
+          <span class="vx-card__tag">Information Systèmes</span>
+        </div>
+        <div class="vx-card__body vx-stack" style="gap: 16px;">
+          <h3 class="vx-title vx-title--3" style="margin: 0;">Déploiement vx-prod-api</h3>
+          <p class="vx-text vx-text--muted">
+            Détails de l'état du conteneur Docker instancié sur le cluster Node.js.
+          </p>
+          <div class="vx-mono vx-text--sm vx-stack" style="background: var(--vx-fill); padding: 14px; border-radius: var(--vx-radius-sm); gap: 6px; border: 1px solid var(--vx-line-2);">
+            <div>Status: <span class="vx-chip vx-chip--ok" style="font-size: 11px; padding: 2px 8px; float: right;">RUNNING</span></div>
+            <div>Conteneur ID: db3a5e1c4b92</div>
+            <div>Réseau: bridge_verdex_net</div>
+            <div>Ports: 5000 -&gt; 5000</div>
+            <div>PostgreSQL: Connecté (Port 5432)</div>
+          </div>
+          <div class="vx-row" style="justify-content: flex-end; margin-top: 8px;">
+            <button class="vx-btn" onclick="toggleModal()">Fermer</button>
+            <button class="vx-btn vx-btn--primary" onclick="alert('Redémarrage lancé !')">Redémarrer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <div class="vx-stack" style="gap: 32px;">
+        <div class="vx-row" style="align-items: center; gap: 12px; padding-left: 8px;">
+          <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 15L45 75L50 85L55 75L80 15H65L50 60L35 15H20Z" fill="var(--vx-accent)" />
+          </svg>
+          <h2 class="vx-title vx-title--3" style="margin: 0; letter-spacing: 0.5px;">Verdex</h2>
+        </div>
+        <nav class="vx-stack" style="gap: 4px;">
+          <a href="#" class="nav-link is-active">
+            <span>📊</span> Dashboard
+          </a>
+          <a href="#" class="nav-link">
+            <span>📦</span> Déploiements
+          </a>
+          <a href="#" class="nav-link">
+            <span>🗄️</span> Bases de données
+          </a>
+          <a href="#" class="nav-link">
+            <span>⚙️</span> Configuration
+          </a>
+          <a href="showcase.html" class="nav-link">
+            <span>🎨</span> Charte Graphique
+          </a>
+        </nav>
+      </div>
+
+      <div class="vx-stack" style="gap: 16px;">
+        <div class="vx-row" style="align-items: center; gap: 12px; padding: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: var(--vx-radius-pill); background: var(--vx-fill-2); border: 2px solid var(--vx-line); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--vx-accent);">
+            JV
+          </div>
+          <div class="vx-stack" style="gap: 2px;">
+            <div class="vx-title vx-title--4" style="margin: 0; font-size: 13px;">Jean Verdex</div>
+            <div class="vx-text vx-text--xs vx-text--muted" style="margin: 0;">Senior Dev</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Section -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="header">
+        <h1 class="vx-title vx-title--3" style="margin: 0;">Cluster Dashboard</h1>
+        <div class="vx-row" style="gap: 20px; align-items: center;">
+          <span class="vx-chip vx-chip--ok"><span class="vx-chip__dot"></span> DOCKER EN LIGNE</span>
+          <button class="vx-btn" onclick="toggleTheme()" style="padding: 8px 12px;">◐ Thème</button>
+        </div>
+      </header>
+
+      <!-- Workspace -->
+      <div class="workspace vx-stack" style="gap: 32px;">
+        <!-- Metrics grid -->
+        <div class="vx-grid-4">
+          <div class="metric-card metric-card--accent">
+            <span class="vx-eyebrow">Déploiements Actifs</span>
+            <div class="vx-title vx-title--1 vx-mono" style="margin: 0;">18 / 18</div>
+            <span class="vx-text vx-text--xs vx-text--muted">Tout est fonctionnel</span>
+          </div>
+          <div class="metric-card metric-card--accent">
+            <span class="vx-eyebrow">Consommation CPU</span>
+            <div class="vx-title vx-title--1 vx-mono" style="margin: 0;" id="cpu-value">42%</div>
+            <!-- Sparkline bar chart -->
+            <div class="sparkline-bar" id="cpu-sparkline">
+              <div class="sparkline-bar__col" style="height: 30%"></div>
+              <div class="sparkline-bar__col" style="height: 45%"></div>
+              <div class="sparkline-bar__col" style="height: 25%"></div>
+              <div class="sparkline-bar__col" style="height: 60%"></div>
+              <div class="sparkline-bar__col" style="height: 50%"></div>
+              <div class="sparkline-bar__col" style="height: 42%"></div>
+            </div>
+          </div>
+          <div class="metric-card metric-card--warn">
+            <span class="vx-eyebrow">Base PostgreSQL</span>
+            <div class="vx-title vx-title--1 vx-mono" style="margin: 0;">128 ms</div>
+            <span class="vx-text vx-text--xs vx-text--muted">Latence requêtes élevées</span>
+          </div>
+          <div class="metric-card metric-card--err">
+            <span class="vx-eyebrow">Erreurs HTTP (24h)</span>
+            <div class="vx-title vx-title--1 vx-mono" style="margin: 0;">3</div>
+            <span class="vx-text vx-text--xs vx-text--muted">Code 502 Bad Gateway</span>
+          </div>
+        </div>
+
+        <!-- Logs & Containers Table -->
+        <div class="vx-card">
+          <div class="vx-card__cap">
+            <span class="vx-card__tag">Conteneurs Docker Actifs</span>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="vx-table">
+              <thead>
+                <tr>
+                  <th>Nom Conteneur</th>
+                  <th>Image</th>
+                  <th>CPU</th>
+                  <th>Mémoire</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="vx-mono">vx-prod-api</td>
+                  <td>node:20-alpine</td>
+                  <td>12%</td>
+                  <td>182 Mo</td>
+                  <td><span class="vx-chip vx-chip--ok"><span class="vx-chip__dot"></span> OK</span></td>
+                  <td><button class="vx-btn vx-btn--ghost vx-btn--sm" onclick="toggleModal()">Détails</button></td>
+                </tr>
+                <tr>
+                  <td class="vx-mono">vx-prod-db</td>
+                  <td>postgres:15-alpine</td>
+                  <td>8%</td>
+                  <td>512 Mo</td>
+                  <td><span class="vx-chip vx-chip--ok"><span class="vx-chip__dot"></span> OK</span></td>
+                  <td><button class="vx-btn vx-btn--ghost vx-btn--sm" onclick="toggleModal()">Détails</button></td>
+                </tr>
+                <tr>
+                  <td class="vx-mono">vx-prod-auth</td>
+                  <td>node:20-alpine</td>
+                  <td>2%</td>
+                  <td>94 Mo</td>
+                  <td><span class="vx-chip vx-chip--ok"><span class="vx-chip__dot"></span> OK</span></td>
+                  <td><button class="vx-btn vx-btn--ghost vx-btn--sm" onclick="toggleModal()">Détails</button></td>
+                </tr>
+                <tr>
+                  <td class="vx-mono">vx-prod-cache</td>
+                  <td>redis:7-alpine</td>
+                  <td>0.5%</td>
+                  <td>45 Mo</td>
+                  <td><span class="vx-chip vx-chip--warn"><span class="vx-chip__dot"></span> ALERTE</span></td>
+                  <td><button class="vx-btn vx-btn--ghost vx-btn--sm" onclick="toggleModal()">Détails</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      function toggleTheme() {
+        const el = document.documentElement;
+        el.dataset.theme = el.dataset.theme === 'light' ? 'dark' : 'light';
+        gsap.fromTo("body", { opacity: 0.8 }, { opacity: 1, duration: 0.4, ease: "power2.out" });
+      }
+
+      function toggleModal() {
+        const modal = document.getElementById('modal');
+        const modalcard = modal.querySelector('.modal-card');
+        
+        if (modal.classList.contains('is-active')) {
+          gsap.timeline()
+            .to(modalcard, { scale: 0.9, y: 20, opacity: 0, duration: 0.25, ease: "power2.in" })
+            .to(modal, { opacity: 0, duration: 0.2, onComplete: () => modal.classList.remove('is-active') });
+        } else {
+          modal.classList.add('is-active');
+          gsap.timeline()
+            .to(modal, { opacity: 1, duration: 0.2 })
+            .to(modalcard, { scale: 1, y: 0, opacity: 1, duration: 0.35, ease: "back.out(1.5)" });
+        }
+      }
+
+      function closeModal(e) {
+        if (e.target === document.getElementById('modal')) {
+          toggleModal();
+        }
+      }
+
+      // Simulation temps-réel de graphe CPU avec animations GSAP
+      setInterval(() => {
+        const val = Math.floor(Math.random() * 40) + 20;
+        document.getElementById('cpu-value').textContent = val + '%';
+        
+        // Mettre à jour et animer le sparkline
+        const cols = document.querySelectorAll('#cpu-sparkline .sparkline-bar__col');
+        // Décaler les hauteurs
+        for (let i = 0; i < cols.length - 1; i++) {
+          const nextHeight = cols[i+1].style.height;
+          gsap.to(cols[i], { height: nextHeight, duration: 0.4, ease: "power2.out" });
+        }
+        gsap.to(cols[cols.length - 1], { height: val + '%', duration: 0.4, ease: "power2.out" });
+      }, 2500);
+
+      // Entrée animée
+      window.addEventListener('DOMContentLoaded', () => {
+        gsap.from(".sidebar", { x: -260, opacity: 0, duration: 0.6, ease: "power3.out" });
+        gsap.from(".metric-card", {
+          y: 30,
+          opacity: 0,
+          duration: 0.5,
+          stagger: 0.08,
+          ease: "power2.out",
+          delay: 0.1
+        });
+        gsap.from(".vx-card:not(.metric-card)", {
+          y: 40,
+          opacity: 0,
+          duration: 0.6,
+          ease: "power3.out",
+          delay: 0.3
+        });
+      });
+    </script>
+  </body>
+</html>

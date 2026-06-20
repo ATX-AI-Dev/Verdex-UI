@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="fr" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Charte Graphique Verdex — Showcase</title>
+    <!-- Google Fonts for multiple design options -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Source+Code+Pro:ital,wght@0,300..900;1,300..900&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Fonts & Primitives CSS -->
+    <link rel="stylesheet" href="../../packages/tokens/src/index.css" />
+    <!-- CDN GSAP pour les micro-animations premium -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <style>
+      body {
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      .showcase-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 60px 24px 120px;
+      }
+      .hero-section {
+        position: relative;
+        padding: 48px;
+        margin-bottom: 48px;
+        overflow: hidden;
+      }
+      .hero-logo-container {
+        position: absolute;
+        top: 50%;
+        right: 8%;
+        transform: translateY(-50%);
+        width: 180px;
+        height: 180px;
+        pointer-events: none;
+        opacity: 0.15;
+      }
+      .color-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+        margin-top: 24px;
+      }
+      .color-card {
+        cursor: pointer;
+        transition: transform 0.2s ease;
+        position: relative;
+      }
+      .color-card__swatch {
+        height: 100px;
+        border-radius: var(--vx-radius-sm);
+        margin-bottom: 12px;
+        border: 2px solid var(--vx-line);
+        position: relative;
+        overflow: hidden;
+      }
+      .color-card__swatch::after {
+        content: 'Copier HEX';
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-family: var(--vx-font-mono);
+        font-size: 12px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+      .color-card:hover .color-card__swatch::after {
+        opacity: 1;
+      }
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: var(--vx-accent);
+        color: var(--vx-accent-ink);
+        padding: 12px 24px;
+        border-radius: var(--vx-radius);
+        font-family: var(--vx-font-sans);
+        font-weight: 600;
+        box-shadow: var(--vx-shadow);
+        transform: translateY(100px);
+        opacity: 0;
+        pointer-events: none;
+        z-index: 9999;
+      }
+      .sketchy-border {
+        border: 2px solid var(--vx-line);
+        border-radius: var(--vx-radius);
+      }
+      .section-title {
+        margin-top: 60px;
+        margin-bottom: 24px;
+        border-left: 4px solid var(--vx-accent);
+        padding-left: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Code couleur copié !</div>
+
+    <div class="showcase-container vx-stack">
+      <!-- Navbar / Header -->
+      <header class="vx-row" style="justify-content: space-between; align-items: center; margin-bottom: 40px;">
+        <div class="vx-row" style="align-items: center; gap: 16px;">
+          <!-- SVG V-Logo -->
+          <svg width="48" height="48" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" id="navbar-logo">
+            <path d="M20 15L45 75L50 85L55 75L80 15H65L50 60L35 15H20Z" fill="var(--vx-accent)" />
+            <path d="M38 15L50 48L62 15H52L50 22L48 15H38Z" fill="var(--vx-muted)" />
+          </svg>
+          <div>
+            <h2 class="vx-title vx-title--3" style="margin: 0; letter-spacing: 1px;">VERDEX</h2>
+            <span class="vx-eyebrow" style="color: var(--vx-accent)">Design Charter &amp; Tokens</span>
+          </div>
+        </div>
+        <div class="vx-row" style="gap: 20px; align-items: center; flex-wrap: wrap;">
+          <div class="vx-row" style="align-items: center; gap: 8px;">
+            <label for="font-select" class="vx-text vx-text--xs vx-mono" style="margin: 0; color: var(--vx-muted);">POLICE :</label>
+            <select id="font-select" class="vx-input" onchange="changeFontPairing(this.value)" style="padding: 6px 12px; font-size: 13px; min-width: 200px; border-radius: var(--vx-radius-sm); border: 2px solid var(--vx-line); background: var(--vx-paper2); color: var(--vx-ink); font-family: var(--vx-font-sans); cursor: pointer;">
+              <option value="space">Space Grotesk &amp; Space Mono</option>
+              <option value="inter">Inter &amp; JetBrains Mono</option>
+              <option value="jakarta">Plus Jakarta Sans &amp; Fira Code</option>
+              <option value="outfit">Outfit &amp; Source Code Pro</option>
+              <option value="editorial">Playfair Display &amp; Inter</option>
+            </select>
+          </div>
+          <button id="theme-btn" class="vx-btn vx-btn--primary" onclick="toggleTheme()">
+            ◐ Thème <span id="theme-label" class="vx-mono" style="margin-left: 8px;">SOMBRE</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Hero Section -->
+      <section class="vx-card hero-section" id="hero-card">
+        <div class="hero-logo-container" id="hero-bg-logo">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 15L45 75L50 85L55 75L80 15H65L50 60L35 15H20Z" fill="var(--vx-accent)" />
+          </svg>
+        </div>
+        <div class="vx-card__body vx-stack" style="max-width: 600px; position: relative; z-index: 2;">
+          <span class="vx-eyebrow">Modèle de Référence Officiel</span>
+          <h1 class="vx-title vx-title--1" style="margin-top: 8px;">Charte Graphique Verdex UI</h1>
+          <p class="vx-text vx-text--lg" style="margin-top: 16px;">
+            Un design system premium caractérisé par une esthétique « sketchy » (bordures marquées, rayons asymétriques) et une harmonie colorimétrique subtile tirée des nouvelles palettes de marque.
+          </p>
+          <p class="vx-text vx-text--muted">
+            Stack associée : <strong>Vue 3 + TS + Tailwind v3 + Node + PostgreSQL + Docker + GSAP</strong>
+          </p>
+          <div class="vx-row" style="margin-top: 24px;">
+            <a href="dashboard_template.html" class="vx-btn">Voir le Dashboard</a>
+            <a href="auth_template.html" class="vx-btn vx-btn--ghost">Voir la page d'Auth</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Palette de Couleurs Actives -->
+      <section class="vx-stack">
+        <h2 class="vx-title vx-title--2 section-title">Nuancier Actif (Theme-aware)</h2>
+        <p class="vx-text vx-text--muted">
+          Cliquez sur une couleur pour copier sa variable CSS ou sa valeur hexadécimale.
+        </p>
+
+        <h3 class="vx-title vx-title--4" style="margin-top: 24px;">Surfaces &amp; Contenants</h3>
+        <div class="color-grid">
+          <div class="vx-card color-card" onclick="copyColor('--vx-bg', 'bg')">
+            <div class="color-card__swatch" style="background: var(--vx-bg)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-bg</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-bg">Loading...</div>
+          </div>
+          <div class="vx-card color-card" onclick="copyColor('--vx-paper', 'paper')">
+            <div class="color-card__swatch" style="background: var(--vx-paper)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-paper</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-paper">Loading...</div>
+          </div>
+          <div class="vx-card color-card" onclick="copyColor('--vx-paper2', 'paper2')">
+            <div class="color-card__swatch" style="background: var(--vx-paper2)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-paper2</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-paper2">Loading...</div>
+          </div>
+          <div class="vx-card color-card" onclick="copyColor('--vx-chrome', 'chrome')">
+            <div class="color-card__swatch" style="background: var(--vx-chrome)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-chrome</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-chrome">Loading...</div>
+          </div>
+        </div>
+
+        <h3 class="vx-title vx-title--4" style="margin-top: 32px;">Texte &amp; Frontières</h3>
+        <div class="color-grid">
+          <div class="vx-card color-card" onclick="copyColor('--vx-ink', 'ink')">
+            <div class="color-card__swatch" style="background: var(--vx-ink)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-ink</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-ink">Loading...</div>
+          </div>
+          <div class="vx-card color-card" onclick="copyColor('--vx-muted', 'muted')">
+            <div class="color-card__swatch" style="background: var(--vx-muted)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-muted</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-muted">Loading...</div>
+          </div>
+          <div class="vx-card color-card" onclick="copyColor('--vx-line', 'line')">
+            <div class="color-card__swatch" style="background: var(--vx-line)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-line</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-line">Loading...</div>
+          </div>
+          <div class="vx-card color-card" onclick="copyColor('--vx-line-2', 'line-2')">
+            <div class="color-card__swatch" style="background: var(--vx-line-2)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-line-2</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-line-2">Loading...</div>
+          </div>
+        </div>
+
+        <h3 class="vx-title vx-title--4" style="margin-top: 32px;">Accent &amp; Remplissages</h3>
+        <div class="color-grid">
+          <div class="vx-card color-card" onclick="copyColor('--vx-accent', 'accent')">
+            <div class="color-card__swatch" style="background: var(--vx-accent)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-accent</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-accent">Loading...</div>
+          </div>
+          <div class="vx-card color-card" onclick="copyColor('--vx-accent-dim', 'accent-dim')">
+            <div class="color-card__swatch" style="background: var(--vx-accent-dim)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-accent-dim</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-accent-dim">Loading...</div>
+          </div>
+          <div class="vx-card color-card" onclick="copyColor('--vx-accent-ink', 'accent-ink')">
+            <div class="color-card__swatch" style="background: var(--vx-accent-ink)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-accent-ink</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-accent-ink">Loading...</div>
+          </div>
+          <div class="vx-card color-card" onclick="copyColor('--vx-fill', 'fill')">
+            <div class="color-card__swatch" style="background: var(--vx-fill)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-fill</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-fill">Loading...</div>
+          </div>
+          <div class="vx-card color-card" onclick="copyColor('--vx-fill-2', 'fill-2')">
+            <div class="color-card__swatch" style="background: var(--vx-fill-2)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-fill-2</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-fill-2">Loading...</div>
+          </div>
+        </div>
+
+        <h3 class="vx-title vx-title--4" style="margin-top: 32px;">Statuts</h3>
+        <div class="color-grid">
+          <div class="vx-card color-card" onclick="copyColor('--vx-warn', 'warn')">
+            <div class="color-card__swatch" style="background: var(--vx-warn)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-warn</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-warn">Loading...</div>
+          </div>
+          <div class="vx-card color-card" onclick="copyColor('--vx-err', 'err')">
+            <div class="color-card__swatch" style="background: var(--vx-err)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-err</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-err">Loading...</div>
+          </div>
+          <div class="vx-card color-card" onclick="copyColor('--vx-info', 'info')">
+            <div class="color-card__swatch" style="background: var(--vx-info)"></div>
+            <div class="vx-text vx-text--sm vx-mono">--vx-info</div>
+            <div class="vx-text vx-text--xs vx-text--muted vx-mono id-color-label" data-var="--vx-info">Loading...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Échelle Typographique -->
+      <section class="vx-stack">
+        <h2 class="vx-title vx-title--2 section-title">Échelle Typographique</h2>
+        <div class="vx-card">
+          <div class="vx-card__body vx-stack" style="gap: 24px;">
+            <div>
+              <span class="vx-mono vx-text--xs vx-text--muted" style="float: right;">--vx-font-sans (Space Grotesk - 32px)</span>
+              <h1 class="vx-title vx-title--1" style="margin: 0;">Titre Niveau 1 (vx-title--1)</h1>
+            </div>
+            <hr class="vx-divider" />
+            <div>
+              <span class="vx-mono vx-text--xs vx-text--muted" style="float: right;">--vx-font-sans (Space Grotesk - 24px)</span>
+              <h2 class="vx-title vx-title--2" style="margin: 0;">Titre Niveau 2 (vx-title--2)</h2>
+            </div>
+            <hr class="vx-divider" />
+            <div>
+              <span class="vx-mono vx-text--xs vx-text--muted" style="float: right;">--vx-font-sans (Space Grotesk - 18px)</span>
+              <h3 class="vx-title vx-title--3" style="margin: 0;">Titre Niveau 3 (vx-title--3)</h3>
+            </div>
+            <hr class="vx-divider" />
+            <div>
+              <span class="vx-mono vx-text--xs vx-text--muted" style="float: right;">--vx-font-sans (Space Grotesk - 15px)</span>
+              <h4 class="vx-title vx-title--4" style="margin: 0;">Titre Niveau 4 (vx-title--4)</h4>
+            </div>
+            <hr class="vx-divider" />
+            <div>
+              <span class="vx-mono vx-text--xs vx-text--muted" style="float: right;">--vx-font-mono (Space Mono - 14px)</span>
+              <p class="vx-mono" style="margin: 0;">Texte Monospace (vx-mono)</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Composants fondamentaux -->
+      <section class="vx-stack">
+        <h2 class="vx-title vx-title--2 section-title">Composants Fondamentaux</h2>
+        <div class="vx-grid-2">
+          <!-- Formulaire -->
+          <div class="vx-card">
+            <div class="vx-card__cap"><span class="vx-card__tag">Formulaire Interactif</span></div>
+            <div class="vx-card__body vx-stack" style="gap: 16px;">
+              <label class="vx-field">
+                <span class="vx-field__label">Adresse Email</span>
+                <span class="vx-field__wrap">
+                  <input class="vx-input" placeholder="entrez votre email..." value="contact@verdex.io" />
+                </span>
+              </label>
+              <label class="vx-field vx-field--error">
+                <span class="vx-field__label">Nouveau mot de passe</span>
+                <span class="vx-field__wrap">
+                  <input class="vx-input" type="password" value="secret" />
+                </span>
+                <span class="vx-field__hint vx-field__hint--error">Le mot de passe doit comporter au moins 8 caractères.</span>
+              </label>
+              <div class="vx-row" style="margin-top: 8px;">
+                <button class="vx-btn vx-btn--primary">Sauvegarder</button>
+                <button class="vx-btn vx-btn--ghost">Annuler</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status & Badges -->
+          <div class="vx-card">
+            <div class="vx-card__cap"><span class="vx-card__tag">Badges &amp; Alertes</span></div>
+            <div class="vx-card__body vx-stack" style="gap: 20px;">
+              <div class="vx-row" style="gap: 10px;">
+                <span class="vx-chip vx-chip--ok"><span class="vx-chip__dot"></span> OK</span>
+                <span class="vx-chip vx-chip--warn"><span class="vx-chip__dot"></span> Warning</span>
+                <span class="vx-chip vx-chip--err"><span class="vx-chip__dot"></span> Error</span>
+                <span class="vx-chip vx-chip--info"><span class="vx-chip__dot"></span> Info</span>
+              </div>
+              <div class="vx-alert vx-alert--success">
+                <span class="vx-alert__icon">✓</span>
+                <div class="vx-alert__body">
+                  <p class="vx-alert__title">Base de données PostgreSQL connectée</p>
+                  <p class="vx-alert__msg">Toutes les migrations Docker sont à jour.</p>
+                </div>
+              </div>
+              <div class="vx-alert vx-alert--warn">
+                <span class="vx-alert__icon">⚠</span>
+                <div class="vx-alert__body">
+                  <p class="vx-alert__msg">GSAP est en mode CPU fallbacks sur cet écran.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pied de page -->
+      <footer style="margin-top: 100px; text-align: center;">
+        <hr class="vx-divider" style="margin-bottom: 24px;" />
+        <p class="vx-text vx-text--sm vx-text--muted">
+          Charte Graphique Verdex UI © 2026. Modèle officiel de design system.
+        </p>
+      </footer>
+    </div>
+
+    <!-- Scripts pour la bascule de thèmes et les animations GSAP -->
+    <script>
+      // Dictionnaire de couleurs pour mise à jour affichage Hex
+      const colorPalettes = {
+        dark: {
+          '--vx-bg': '#141f22',
+          '--vx-paper': '#222d2f',
+          '--vx-paper2': '#2b3537',
+          '--vx-chrome': '#1b2628',
+          '--vx-ink': '#acc1c2',
+          '--vx-muted': '#617b7c',
+          '--vx-line': '#3d4e51',
+          '--vx-line-2': '#2e3d40',
+          '--vx-fill': '#1a2629',
+          '--vx-fill-2': '#243337',
+          '--vx-accent': '#8ac8af',
+          '--vx-accent-dim': '#4e8e75',
+          '--vx-accent-ink': '#141f22',
+          '--vx-warn': '#d6ab56',
+          '--vx-err': '#db7369',
+          '--vx-info': '#67aee8',
+        },
+        light: {
+          '--vx-bg': '#eaeae8',
+          '--vx-paper': '#f7f7f7',
+          '--vx-paper2': '#efefee',
+          '--vx-chrome': '#e7e7e6',
+          '--vx-ink': '#132026',
+          '--vx-muted': '#94a2a5',
+          '--vx-line': '#cbd3d6',
+          '--vx-line-2': '#dde4e6',
+          '--vx-fill': '#e8ecee',
+          '--vx-fill-2': '#dfe3e5',
+          '--vx-accent': '#7ec3b0',
+          '--vx-accent-dim': '#569d8a',
+          '--vx-accent-ink': '#132026',
+          '--vx-warn': '#e0a945',
+          '--vx-err': '#d46054',
+          '--vx-info': '#5097d6',
+        }
+      };
+
+      function updateHexLabels() {
+        const theme = document.documentElement.dataset.theme || 'dark';
+        document.querySelectorAll('.id-color-label').forEach(label => {
+          const varName = label.dataset.var;
+          label.textContent = colorPalettes[theme][varName].toUpperCase();
+        });
+      }
+
+      function toggleTheme() {
+        const el = document.documentElement;
+        const currentTheme = el.dataset.theme === 'light' ? 'dark' : 'light';
+        el.dataset.theme = currentTheme;
+        
+        document.getElementById('theme-label').textContent = currentTheme.toUpperCase();
+        document.getElementById('theme-btn').className = currentTheme === 'light' ? 'vx-btn' : 'vx-btn vx-btn--primary';
+        
+        updateHexLabels();
+
+        // Animation GSAP de transition de thème
+        gsap.fromTo("body", { opacity: 0.8 }, { opacity: 1, duration: 0.4, ease: "power2.out" });
+        gsap.from(".color-card", {
+          scale: 0.95,
+          opacity: 0.5,
+          duration: 0.4,
+          stagger: 0.03,
+          ease: "back.out(1.5)"
+        });
+      }
+
+      const fontPairings = {
+        space: {
+          sans: "'Space Grotesk', system-ui, -apple-system, sans-serif",
+          mono: "'Space Mono', ui-monospace, monospace"
+        },
+        inter: {
+          sans: "'Inter', system-ui, -apple-system, sans-serif",
+          mono: "'JetBrains Mono', ui-monospace, monospace"
+        },
+        jakarta: {
+          sans: "'Plus Jakarta Sans', system-ui, sans-serif",
+          mono: "'Fira Code', monospace"
+        },
+        outfit: {
+          sans: "'Outfit', system-ui, sans-serif",
+          mono: "'Source Code Pro', monospace"
+        },
+        editorial: {
+          sans: "'Playfair Display', Georgia, serif",
+          mono: "'Inter', sans-serif"
+        }
+      };
+
+      function changeFontPairing(pairingKey) {
+        const pairing = fontPairings[pairingKey];
+        if (!pairing) return;
+        
+        // Select all text elements inside the showcase container to transition smoothly
+        const textElements = document.querySelectorAll(
+          ".showcase-container h1, .showcase-container h2, .showcase-container h3, .showcase-container h4, .showcase-container p, .showcase-container span, .showcase-container input, .showcase-container button, .showcase-container label, .showcase-container a, .showcase-container select"
+        );
+        
+        gsap.timeline()
+          .to(textElements, {
+            opacity: 0.3,
+            y: -5,
+            duration: 0.2,
+            stagger: 0.005,
+            ease: "power2.in",
+            onComplete: () => {
+              document.documentElement.style.setProperty('--vx-font-sans', pairing.sans);
+              document.documentElement.style.setProperty('--vx-font-mono', pairing.mono);
+            }
+          })
+          .to(textElements, {
+            opacity: 1,
+            y: 0,
+            duration: 0.4,
+            stagger: 0.005,
+            ease: "back.out(1.5)"
+          });
+      }
+
+      function copyColor(varName, cssClass) {
+        const theme = document.documentElement.dataset.theme || 'dark';
+        const hex = colorPalettes[theme][varName];
+        
+        navigator.clipboard.writeText(hex).then(() => {
+          const toast = document.getElementById('toast');
+          toast.textContent = `Variable ${varName} (${hex.toUpperCase()}) copiée !`;
+          
+          gsap.killTweensOf(toast);
+          gsap.timeline()
+            .to(toast, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(1.7)" })
+            .to(toast, { y: 100, opacity: 0, duration: 0.3, delay: 2.5, ease: "power2.in" });
+        });
+      }
+
+      // Initialisation
+      window.addEventListener('DOMContentLoaded', () => {
+        updateHexLabels();
+
+        // GSAP Parallax effet sur le fond du Hero
+        document.addEventListener('mousemove', (e) => {
+          const depth = 30;
+          const moveX = (e.clientX - window.innerWidth / 2) / depth;
+          const moveY = (e.clientY - window.innerHeight / 2) / depth;
+          
+          gsap.to('#hero-bg-logo', {
+            x: moveX,
+            y: moveY,
+            duration: 1,
+            ease: "power2.out"
+          });
+        });
+
+        // Animations d'apparition initiales
+        gsap.from("#hero-card", {
+          y: 40,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out"
+        });
+        
+        gsap.from(".color-card", {
+          y: 30,
+          opacity: 0,
+          duration: 0.6,
+          delay: 0.2,
+          stagger: 0.02,
+          ease: "power2.out"
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -33,7 +33,7 @@ const props = withDefaults(
     /** Taille de page (0 = pas de pagination). */
     pageSize?: number
   }>(),
-  { rowKey: 'id', pageSize: 0 },
+  { rowKey: 'id', pageSize: 25 },
 )
 
 const emit = defineEmits<{ rowClick: [row: Row] }>()

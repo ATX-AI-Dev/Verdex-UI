@@ -374,7 +374,7 @@
 }
 .vx-badge--neutral { background: var(--vx-fill-2); color: var(--vx-ink); }
 .vx-badge--warn { background: var(--vx-warn); color: var(--vx-accent-ink); }
-.vx-badge--err { background: var(--vx-err); color: #fff; }
+.vx-badge--err { background: var(--vx-err); color: var(--vx-bg); }
 .vx-badge--info { background: var(--vx-info); color: var(--vx-accent-ink); }
 .vx-badge--dot {
   min-width: 9px;
@@ -680,10 +680,13 @@
 .vx-row { display: flex; align-items: center; gap: 10px; }
 .vx-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
 .vx-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.vx-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 @media (max-width: 1080px) {
-  .vx-grid-3 { grid-template-columns: 1fr 1fr; }
+  .vx-grid-3,
+  .vx-grid-4 { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 760px) {
   .vx-grid-2,
-  .vx-grid-3 { grid-template-columns: 1fr; }
+  .vx-grid-3,
+  .vx-grid-4 { grid-template-columns: 1fr; }
 }
